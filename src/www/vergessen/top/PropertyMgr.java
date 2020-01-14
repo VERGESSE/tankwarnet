@@ -14,6 +14,14 @@ public class PropertyMgr {
         }
     }
 
+    public static Integer getInt(String key){
+        return Integer.parseInt(PropertyMgr.getString(key));
+    }
+
+    public static String getString(String key){
+        return (String)PropertyMgr.get(key);
+    }
+
     public static Object get(String key){
         if(props == null) return null;
         return props.get(key);
