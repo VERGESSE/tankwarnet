@@ -13,6 +13,8 @@ public class Tank {
     private Group group = Group.BAD;
     private Random random = new Random();
 
+    private Rectangle rectangle = new Rectangle();
+
     public static int GOODWIDTH = ResourceMgr.goodTankU.getWidth();
     public static int GOODHEIGHT = ResourceMgr.goodTankU.getHeight();
 
@@ -22,6 +24,11 @@ public class Tank {
         this.dir = dir;
         this.group = group;
         this.tankFrame = tankFrame;
+
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+        rectangle.width = GOODWIDTH;
+        rectangle.height = GOODHEIGHT;
     }
 
     public void paint(Graphics g) {
@@ -103,9 +110,30 @@ public class Tank {
             case RIGHT_DOWN: x+=SPEED/1.414;y+=SPEED/1.414;break;
             case RIGHT_UP: x+=SPEED/1.414;y-=SPEED/1.414;break;
         }
+
         if(this.group == Group.BAD && random.nextInt(20) > 18) this.fire();
-        if(this.x < 0 || this.y < 0 || this.x > TankFrame.GAME_WIDTH - GOODWIDTH|| this.y > TankFrame.GAME_HEIGHT - GOODHEIGHT)
+        //边界判断
+        if(this.group == Group.BAD) boundCheckBAD();
+        else boundCheckGOOD();
+
+        //update rectangle
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+    }
+
+    private void boundCheckBAD(){
+        if(this.x < 2 || this.y < 32 || this.x > TankFrame.GAME_WIDTH - GOODWIDTH - 2|| this.y > TankFrame.GAME_HEIGHT - GOODHEIGHT - 2)
             this.dir = Dir.getRandomDir();
+    }
+    private void boundCheckGOOD(){
+        if(this.x < 2)
+            this.x = 2;
+        if(this.y < 32)
+            this.y = 32;
+        if(this.x > TankFrame.GAME_WIDTH - GOODWIDTH - 2)
+            this.x = TankFrame.GAME_WIDTH - GOODWIDTH - 2;
+        if(this.y > TankFrame.GAME_HEIGHT - GOODHEIGHT - 2)
+            this.y = TankFrame.GAME_HEIGHT - GOODHEIGHT - 2;
     }
 
     public Dir getDir() {
