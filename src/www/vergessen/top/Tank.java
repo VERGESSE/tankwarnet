@@ -1,24 +1,26 @@
 package www.vergessen.top;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 public class Tank {
-    private int x,y;
-    private Dir dir;
+    int x,y;
+    Dir dir;
     private static final int SPEED = 5;
     private boolean moving = false;
-    private TankFrame tankFrame;
+    TankFrame tankFrame;
     private boolean living = true;
-    private Group group = Group.BAD;
+    Group group = Group.BAD;
     private Random random = new Random();
+    FireStrategy fs;
 
     private Rectangle rectangle = new Rectangle();
 
     public static int GOODWIDTH = ResourceMgr.goodTankU.getWidth();
     public static int GOODHEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    public Tank(int x, int y, Dir dir,Group group,TankFrame tankFrame) {
+    public Tank(int x, int y, Dir dir,Group group,TankFrame tankFrame){
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -29,6 +31,19 @@ public class Tank {
         rectangle.y = this.y;
         rectangle.width = GOODWIDTH;
         rectangle.height = GOODHEIGHT;
+        if(group == Group.GOOD) {
+            try {
+                fs = (FireStrategy) Class.forName(PropertyMgr.instance().getString("goodFs")).getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            try {
+                fs = (FireStrategy) Class.forName(PropertyMgr.instance().getString("badFs")).getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void paint(Graphics g) {
@@ -153,11 +168,7 @@ public class Tank {
     }
 
     public void fire() {
-        if(this.group == Group.GOOD)
-            new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
-        int bx = this.x + Tank.GOODWIDTH / 2 - Bullet.WIDTH / 2;
-        int by = this.y + Tank.GOODHEIGHT / 2 - Bullet.HEIGHT /2;
-        tankFrame.bullets.add(new Bullet(bx, by, this.dir,this.group,this.tankFrame));
+        fs.fire(this);
     }
 
     public int getX() {

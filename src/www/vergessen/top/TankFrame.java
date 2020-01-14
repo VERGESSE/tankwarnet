@@ -84,10 +84,10 @@ public class TankFrame extends Frame {
 //            new Thread(()->new Audio("audio/tank_move.wav").play()).start();
             int key = e.getKeyCode();
             switch (key) {
-                case KeyEvent.VK_LEFT: bL = true;break;
-                case KeyEvent.VK_UP: bU = true;break;
-                case KeyEvent.VK_RIGHT: bR = true;break;
-                case KeyEvent.VK_DOWN: bD = true;break;
+                case KeyEvent.VK_A: bL = true;break;
+                case KeyEvent.VK_W: bU = true;break;
+                case KeyEvent.VK_D: bR = true;break;
+                case KeyEvent.VK_S: bD = true;break;
                 default: break;
             }
 
@@ -112,11 +112,11 @@ public class TankFrame extends Frame {
         public void keyReleased(KeyEvent e) {
             int key = e.getKeyCode();
             switch (key) {
-                case KeyEvent.VK_LEFT: bL = false;break;
-                case KeyEvent.VK_UP: bU = false;break;
-                case KeyEvent.VK_RIGHT: bR = false;break;
-                case KeyEvent.VK_DOWN: bD = false;break;
-                case KeyEvent.VK_CONTROL:
+                case KeyEvent.VK_A: bL = false;break;
+                case KeyEvent.VK_W: bU = false;break;
+                case KeyEvent.VK_D: bR = false;break;
+                case KeyEvent.VK_S: bD = false;break;
+                case KeyEvent.VK_J:
                     myTank.fire();
                     break;
                 default: break;

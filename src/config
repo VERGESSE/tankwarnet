@@ -4,3 +4,7 @@ tankSpeed=5
 bulletSpeed=15
 gameWidth=1080
 gameHeight=720
+
+#fireStrategy
+goodFs=www.vergessen.top.EightDirFireStrategy
+badFs=www.vergessen.top.DeafaultFireStrategy
