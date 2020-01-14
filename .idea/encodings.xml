@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/audio" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/0.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/1.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/10.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/2.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/3.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/4.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/5.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/6.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/7.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/8.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/9.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/BadTank1.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/BadTank2.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/GoodTank1.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/GoodTank2.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/bulletD.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/bulletL.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/bulletR.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/bulletU.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/bulletU.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e1.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e10.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e11.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e12.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e13.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e14.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e15.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e16.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e2.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e3.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e4.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e5.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e6.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e7.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e8.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/e9.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/missileLD.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/missileLU.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/missileRD.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/missileRU.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/square0.jpg" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/square1.jpg" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/square2.jpg" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/square3.jpg" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/square4.jpg" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/square5.jpg" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/square6.jpg" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tank.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tankD.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tankL.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tankLD.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tankLU.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tankR.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tankRD.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tankRU.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/images/tankU.gif" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/images" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/www/vergessen/top/Audio.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/www/vergessen/top/ImageUtil.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/www/vergessen/top/TankFrame.java" charset="UTF-8" />
+  </component>
+</project>
