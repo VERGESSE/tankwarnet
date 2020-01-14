@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class PropertyMgr {
-    static Properties props = new Properties();
+    private static final PropertyMgr propertyMgr = new PropertyMgr();
+    private static Properties props = new Properties();
 
     static {
         try {
@@ -12,6 +13,12 @@ public class PropertyMgr {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private PropertyMgr(){}
+
+    public static PropertyMgr instance(){
+        return propertyMgr;
     }
 
     public static Integer getInt(String key){
@@ -25,5 +32,11 @@ public class PropertyMgr {
     public static Object get(String key){
         if(props == null) return null;
         return props.get(key);
+    }
+
+    public static void main(String[] args) {
+        for(int i = 0; i < 100; i++){
+            System.out.println(PropertyMgr.instance().hashCode());
+        }
     }
 }

@@ -5,11 +5,17 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class ResourceMgr {
+    private static final ResourceMgr resourceMgr = new ResourceMgr();
     public static BufferedImage goodTankL, goodTankU, goodTankR, goodTankD, goodTankLU,goodTankLD,goodTankRD,goodTankRU;
     public static BufferedImage badTankL, badTankU, badTankR, badTankD,badTankLD, badTankLU, badTankRD, badTankRU;
     public static BufferedImage bulletL, bulletU, bulletR, bulletD,bulletLU, bulletRU, bulletRD, bulletLD;
     public static BufferedImage[] explodes = new BufferedImage[16];
 
+    private ResourceMgr(){}
+
+    public static ResourceMgr getInstance(){
+        return resourceMgr;
+    }
 
     static {
         try {
@@ -44,6 +50,14 @@ public class ResourceMgr {
                 explodes[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e" + (i+1) + ".gif"));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        for(int i = 0;i < 100;i++){
+            new Thread(()->{
+                System.out.println(ResourceMgr.badTankU.hashCode());
+            }).start();
         }
     }
 }
