@@ -7,14 +7,14 @@ public class Exploder {
     public static int HEIGHT = ResourceMgr.explodes[0].getHeight();
     private int x,y;
     private boolean living = true;
-    private TankFrame tankFrame;
+    private GameModel gameModel;
 
     private int step = 0;
 
-    public Exploder(int x, int y,TankFrame tankFrame) {
+    public Exploder(int x, int y,GameModel tankFrame) {
         this.x = x;
         this.y = y;
-        this.tankFrame = tankFrame;
+        this.gameModel = tankFrame;
 
         new Thread(()->new Audio("audio/explode.wav").play()).start();
     }
@@ -22,7 +22,7 @@ public class Exploder {
     public void paint(Graphics g){
         g.drawImage(ResourceMgr.explodes[step++],x,y,null);
         if(step >= ResourceMgr.explodes.length)
-            tankFrame.exploders.remove(this);
+            gameModel.explodes.remove(this);
 
 
     }

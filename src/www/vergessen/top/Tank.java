@@ -1,7 +1,6 @@
 package www.vergessen.top;
 
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 public class Tank {
@@ -9,23 +8,23 @@ public class Tank {
     Dir dir;
     private static final int SPEED = 5;
     private boolean moving = false;
-    TankFrame tankFrame;
     private boolean living = true;
     Group group = Group.BAD;
     private Random random = new Random();
     FireStrategy fs;
+    GameModel gameModel;
 
     private Rectangle rectangle = new Rectangle();
 
     public static int GOODWIDTH = ResourceMgr.goodTankU.getWidth();
     public static int GOODHEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    public Tank(int x, int y, Dir dir,Group group,TankFrame tankFrame){
+    public Tank(int x, int y, Dir dir,Group group,GameModel gameModel){
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tankFrame = tankFrame;
+        this.gameModel = gameModel;
 
         rectangle.x = this.x;
         rectangle.y = this.y;
@@ -48,7 +47,7 @@ public class Tank {
 
     public void paint(Graphics g) {
         if(!living) {
-            tankFrame.badTank.remove(this);
+            gameModel.tanks.remove(this);
         }
         if(this.group == Group.GOOD) {
             switch (dir) {
