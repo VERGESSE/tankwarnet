@@ -2,7 +2,7 @@ package www.vergessen.top;
 
 import java.awt.*;
 
-public class Bullet {
+public class Bullet extends GameObject {
     private static final int SPEED = 15;
     public static int WIDTH = ResourceMgr.bulletD.getWidth();
     public static int HEIGHT = ResourceMgr.bulletD.getHeight();
@@ -26,12 +26,12 @@ public class Bullet {
         rectangle.width = WIDTH;
         rectangle.height = HEIGHT;
 
-        gameModel.bullets.add(this);
+        gameModel.add(this);
     }
 
     public void paint(Graphics g){
         if(!living){
-            gameModel.bullets.remove(this);
+            gameModel.remove(this);
         }
         switch (dir){
             case UP:g.drawImage(ResourceMgr.bulletU,x,y,null);break;
@@ -67,17 +67,18 @@ public class Bullet {
             living = false;
     }
 
-    public void collideWith(Tank tank) {
-        if(this.group == tank.getGroup())return;
-
+    public boolean collideWith(Tank tank) {
+        if(this.group == tank.getGroup())return false;
 
         Rectangle rectangle1 = new Rectangle(this.x, this.y, WIDTH, HEIGHT);
         Rectangle rectangle2 = new Rectangle(tank.getX(), tank.getY(), Tank.GOODWIDTH, Tank.GOODHEIGHT);
         if (rectangle1.intersects(rectangle2)) {
             this.die();
             tank.die();
-            gameModel.explodes.add(new Exploder(tank.getX() + Tank.GOODWIDTH/2-Exploder.WIDTH/2,tank.getY()+Tank.GOODHEIGHT/2-Exploder.HEIGHT/2,gameModel));
+            gameModel.add(new Explode(tank.getX() + Tank.GOODWIDTH/2- Explode.WIDTH/2,tank.getY()+Tank.GOODHEIGHT/2- Explode.HEIGHT/2,gameModel));
+            return true;
         }
+        return false;
     }
 
     private void die() {

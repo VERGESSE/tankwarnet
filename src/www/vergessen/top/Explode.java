@@ -2,7 +2,7 @@ package www.vergessen.top;
 
 import java.awt.*;
 
-public class Exploder {
+public class Explode extends GameObject {
     public static int WIDTH = ResourceMgr.explodes[0].getWidth();
     public static int HEIGHT = ResourceMgr.explodes[0].getHeight();
     private int x,y;
@@ -11,7 +11,7 @@ public class Exploder {
 
     private int step = 0;
 
-    public Exploder(int x, int y,GameModel tankFrame) {
+    public Explode(int x, int y, GameModel tankFrame) {
         this.x = x;
         this.y = y;
         this.gameModel = tankFrame;
@@ -22,7 +22,7 @@ public class Exploder {
     public void paint(Graphics g){
         g.drawImage(ResourceMgr.explodes[step++],x,y,null);
         if(step >= ResourceMgr.explodes.length)
-            gameModel.explodes.remove(this);
+            gameModel.remove(this);
 
 
     }

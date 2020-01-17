@@ -3,7 +3,7 @@ package www.vergessen.top;
 import java.awt.*;
 import java.util.Random;
 
-public class Tank {
+public class Tank extends GameObject {
     int x,y;
     Dir dir;
     private static final int SPEED = 5;
@@ -13,6 +13,7 @@ public class Tank {
     private Random random = new Random();
     FireStrategy fs;
     GameModel gameModel;
+    private int oldX,oldY;
 
     private Rectangle rectangle = new Rectangle();
 
@@ -47,7 +48,7 @@ public class Tank {
 
     public void paint(Graphics g) {
         if(!living) {
-            gameModel.tanks.remove(this);
+            gameModel.remove(this);
         }
         if(this.group == Group.GOOD) {
             switch (dir) {
@@ -114,6 +115,7 @@ public class Tank {
         if(!moving)
             return;
         if(random.nextInt(40) > 38) this.dir = Dir.getRandomDir();
+        oldX = x;oldY = y;
         switch (dir){
             case LEFT: x-=SPEED;break;
             case UP: y-=SPEED;break;
@@ -136,8 +138,15 @@ public class Tank {
     }
 
     private void boundCheckBAD(){
-        if(this.x < 2 || this.y < 32 || this.x > TankFrame.GAME_WIDTH - GOODWIDTH - 2|| this.y > TankFrame.GAME_HEIGHT - GOODHEIGHT - 2)
+        if(this.x < 2 || this.y < 32 || this.x > TankFrame.GAME_WIDTH - GOODWIDTH - 2|| this.y > TankFrame.GAME_HEIGHT - GOODHEIGHT - 2) {
+            this.x = this.oldX;
+            this.y = this.oldY;
             this.dir = Dir.getRandomDir();
+        }
+//        if(this.x < 0) this.x = 2;
+//        if(this.y <30) this.y = 32;
+//        if(this.x > TankFrame.GAME_WIDTH - GOODWIDTH - 2) this.x = TankFrame.GAME_WIDTH - GOODWIDTH - 3;
+//        if(this.y > TankFrame.GAME_HEIGHT - GOODHEIGHT - 2) this.y = TankFrame.GAME_HEIGHT - GOODHEIGHT - 3;
     }
     private void boundCheckGOOD(){
         if(this.x < 2)
@@ -196,5 +205,25 @@ public class Tank {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public int getOldX() {
+        return oldX;
+    }
+
+    public void setOldX(int oldX) {
+        this.oldX = oldX;
+    }
+
+    public int getOldY() {
+        return oldY;
+    }
+
+    public void setOldY(int oldY) {
+        this.oldY = oldY;
     }
 }

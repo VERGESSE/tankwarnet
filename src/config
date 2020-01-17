@@ -8,3 +8,5 @@ gameHeight=720
 #fireStrategy
 goodFs=www.vergessen.top.EightDirFireStrategy
 badFs=www.vergessen.top.DeafaultFireStrategy
+#colliders
+colliders=www.vergessen.top.cor.BulletTankCollider,www.vergessen.top.cor.TankTankCollider
