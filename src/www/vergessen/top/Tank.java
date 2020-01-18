@@ -9,7 +9,7 @@ public class Tank extends GameObject {
     private static final int SPEED = 6;
     private boolean moving = false;
     private boolean living = true;
-    Group group = Group.BAD;
+    Group group;
     private Random random = new Random();
     FireStrategy fs;
     private int oldX,oldY;
