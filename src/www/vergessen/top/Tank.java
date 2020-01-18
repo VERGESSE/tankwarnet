@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.Random;
 
 public class Tank extends GameObject {
-    int x,y;
     Dir dir;
     private static final int SPEED = 6;
     private boolean moving = false;
@@ -42,7 +41,7 @@ public class Tank extends GameObject {
                 e.printStackTrace();
             }
         }
-        GameModel.getInstance().add(this);
+//        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g) {
@@ -108,6 +107,16 @@ public class Tank extends GameObject {
         if(this.group == Group.BAD)
             this.moving = true;
         move();
+    }
+
+    @Override
+    public int getWidth() {
+        return GOODWIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return GOODHEIGHT;
     }
 
     private void move() {

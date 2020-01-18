@@ -19,6 +19,7 @@ public class TankFrame extends Frame {
         setVisible(true);
 
         this.addKeyListener(new MyKeyListener());
+
         addWindowListener(new WindowAdapter() {
 
             @Override
@@ -30,6 +31,7 @@ public class TankFrame extends Frame {
     }
 
     Image offScreenImage = null;
+
 	@Override
     public void update(Graphics g){
 	    if(offScreenImage == null){
