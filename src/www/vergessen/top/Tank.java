@@ -6,13 +6,12 @@ import java.util.Random;
 public class Tank extends GameObject {
     int x,y;
     Dir dir;
-    private static final int SPEED = 5;
+    private static final int SPEED = 6;
     private boolean moving = false;
     private boolean living = true;
     Group group = Group.BAD;
     private Random random = new Random();
     FireStrategy fs;
-    GameModel gameModel;
     private int oldX,oldY;
 
     private Rectangle rectangle = new Rectangle();
@@ -20,12 +19,11 @@ public class Tank extends GameObject {
     public static int GOODWIDTH = ResourceMgr.goodTankU.getWidth();
     public static int GOODHEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    public Tank(int x, int y, Dir dir,Group group,GameModel gameModel){
+    public Tank(int x, int y, Dir dir,Group group){
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.gameModel = gameModel;
 
         rectangle.x = this.x;
         rectangle.y = this.y;
@@ -44,11 +42,12 @@ public class Tank extends GameObject {
                 e.printStackTrace();
             }
         }
+        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g) {
         if(!living) {
-            gameModel.remove(this);
+            GameModel.getInstance().remove(this);
         }
         if(this.group == Group.GOOD) {
             switch (dir) {
@@ -114,7 +113,7 @@ public class Tank extends GameObject {
     private void move() {
         if(!moving)
             return;
-        if(random.nextInt(40) > 38) this.dir = Dir.getRandomDir();
+        if(this.group == Group.BAD && random.nextInt(40) > 38) this.dir = Dir.getRandomDir();
         oldX = x;oldY = y;
         switch (dir){
             case LEFT: x-=SPEED;break;

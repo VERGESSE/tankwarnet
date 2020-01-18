@@ -10,28 +10,26 @@ public class Bullet extends GameObject {
     private Dir dir;
     private boolean living = true;
     private Group group = Group.BAD;
-    private GameModel gameModel;
 
-    private Rectangle rectangle = new Rectangle();
+    public Rectangle rectangle = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir,Group group,GameModel gameModel) {
+    public Bullet(int x, int y, Dir dir,Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.gameModel = gameModel;
 
         rectangle.x = this.x;
         rectangle.y = this.y;
         rectangle.width = WIDTH;
         rectangle.height = HEIGHT;
 
-        gameModel.add(this);
+        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g){
         if(!living){
-            gameModel.remove(this);
+            GameModel.getInstance().remove(this);
         }
         switch (dir){
             case UP:g.drawImage(ResourceMgr.bulletU,x,y,null);break;
@@ -67,21 +65,7 @@ public class Bullet extends GameObject {
             living = false;
     }
 
-    public boolean collideWith(Tank tank) {
-        if(this.group == tank.getGroup())return false;
-
-        Rectangle rectangle1 = new Rectangle(this.x, this.y, WIDTH, HEIGHT);
-        Rectangle rectangle2 = new Rectangle(tank.getX(), tank.getY(), Tank.GOODWIDTH, Tank.GOODHEIGHT);
-        if (rectangle1.intersects(rectangle2)) {
-            this.die();
-            tank.die();
-            gameModel.add(new Explode(tank.getX() + Tank.GOODWIDTH/2- Explode.WIDTH/2,tank.getY()+Tank.GOODHEIGHT/2- Explode.HEIGHT/2,gameModel));
-            return true;
-        }
-        return false;
-    }
-
-    private void die() {
+    public void die() {
         this.living = false;
     }
 

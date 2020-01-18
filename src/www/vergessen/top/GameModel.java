@@ -8,21 +8,34 @@ import java.util.List;
 
 public class GameModel {
 
-    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
+    private static final GameModel INSTANCE = new GameModel();
+    static {
+        INSTANCE.init();
+    }
+    Tank myTank;
 
-//    List<Bullet> bullets = new ArrayList<>();
-//    List<Tank> tanks = new ArrayList<>();
-//    List<Explode> explodes = new ArrayList<>();      //加入调停者，，游戏物体抽象类GameObject
     ColliderChain colliderChain = new ColliderChain();
     private List<GameObject> gameObjects = new ArrayList<>();
 
-    public GameModel(){
+    public static GameModel getInstance() {
+        return INSTANCE;
+    }
+
+    private GameModel(){}
+
+    private void init(){
+        myTank = new Tank(300,300,Dir.DOWN,Group.GOOD);
         int initTankCount = PropertyMgr.instance().getInt("initTankCount");
         //初始化敌方坦克
         for(int i = 0; i < initTankCount ; i++){
-            add(new Tank(30 + i * 70
-                    ,100,Dir.DOWN,Group.BAD,this));
+            new Tank(30 + i * 70,100,Dir.DOWN,Group.BAD);
         }
+
+        //初始化墙
+        add(new Wall(200,250,200,50));
+        add(new Wall(650,250,200,50));
+        add(new Wall(350,400,50,200));
+        add(new Wall(650,400,50,200));
     }
 
     public void add(GameObject gameObject){
