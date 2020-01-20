@@ -205,6 +205,9 @@ public class Tank extends GameObject {
 
     public void die() {
         living = false;
+        int eX = this.getX() + Tank.GOODWIDTH/2 - Explode.WIDTH/2;
+        int eY = this.getY() + Tank.GOODWIDTH/2 - Explode.HEIGHT/2;
+        new Explode(eX, eY);
     }
 
     public Group getGroup() {

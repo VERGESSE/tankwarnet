@@ -25,6 +25,7 @@ public class GameModel {
 
     private void init(){
         myTank = new Tank(200,400,Dir.DOWN,Group.GOOD);
+        add(myTank);
         int initTankCount = PropertyMgr.instance().getInt("initTankCount");
         //初始化敌方坦克
         for(int i = 0; i < initTankCount ; i++){
@@ -52,7 +53,7 @@ public class GameModel {
 //        g.drawString("子弹的数量" + bullets.size(),13,48);
 //        g.drawString("敌人的数量" + tanks.size(),13,68);
         g.setColor(color);
-        myTank.paint(g);
+//        myTank.paint(g);
         for (int i = 0; i < gameObjects.size(); i++) {
             gameObjects.get(i).paint(g);
         }

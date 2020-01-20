@@ -15,9 +15,9 @@ public class TankWallCollider implements Collider {
                     t.setY(t.getOldY());
                     t.setDir(Dir.getOppositeDir(t.getDir()));
                 }
-//                if(t.getGroup() == Group.GOOD){
-//                    t.setMoving(false);
-//                }
+                if(t.getGroup() == Group.GOOD){
+                    t.setMoving(false);
+                }
             }
         }else if(o2 instanceof Tank && o1 instanceof Wall){
             return collide(o2, o1);
