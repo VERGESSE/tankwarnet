@@ -3,6 +3,7 @@ package www.vergessen.top;
 import www.vergessen.top.cor.ColliderChain;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class GameModel {
 
     private void init(){
         myTank = new Tank(200,400,Dir.DOWN,Group.GOOD);
-        add(myTank);
+//        add(myTank);
         int initTankCount = PropertyMgr.instance().getInt("initTankCount");
         //初始化敌方坦克
         for(int i = 0; i < initTankCount ; i++){
@@ -50,10 +51,9 @@ public class GameModel {
     public void paint(Graphics g) {
         Color color = g.getColor();
         g.setColor(Color.WHITE);
-//        g.drawString("子弹的数量" + bullets.size(),13,48);
-//        g.drawString("敌人的数量" + tanks.size(),13,68);
         g.setColor(color);
-//        myTank.paint(g);
+
+        myTank.paint(g);
         for (int i = 0; i < gameObjects.size(); i++) {
             gameObjects.get(i).paint(g);
         }
@@ -65,14 +65,49 @@ public class GameModel {
                 GameObject o2 = gameObjects.get(j);
                 colliderChain.collide(o1,o2);
             }
+            colliderChain.collide(gameObjects.get(i),myTank);
         }
-
-//        for(int i = 0; i < bullets.size() ; i++)
-//            for(int j = 0; j < tanks.size(); j++)
-//                bullets.get(i).collideWith(tanks.get(j));
     }
 
     public Tank getMainTank() {
         return myTank;
+    }
+
+    public void save() {
+        File f = new File("E:\\myProject\\tank\\src\\tank.data");
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream(f));
+            oos.writeObject(myTank);
+            oos.writeObject(gameObjects);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void load() {
+        File f = new File("E:\\myProject\\tank\\src\\tank.data");
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream(f));
+            myTank = (Tank) ois.readObject();
+            gameObjects = (List<GameObject>) ois.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                ois.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
