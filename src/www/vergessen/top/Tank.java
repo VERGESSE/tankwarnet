@@ -1,7 +1,13 @@
 package www.vergessen.top;
 
+import www.vergessen.top.net.TankJoinMsg;
+
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
+
+import static www.vergessen.top.Bullet.HEIGHT;
+import static www.vergessen.top.Bullet.WIDTH;
 
 public class Tank {
     private int x,y;
@@ -11,6 +17,8 @@ public class Tank {
     private TankFrame tankFrame;
     private boolean living = true;
     private Group group = Group.BAD;
+    UUID id = UUID.randomUUID();
+
     private Random random = new Random();
 
     private Rectangle rectangle = new Rectangle();
@@ -31,10 +39,28 @@ public class Tank {
         rectangle.height = GOODHEIGHT;
     }
 
+    public Tank(TankJoinMsg msg) {
+        this.x = msg.x;
+        this.y = msg.y;
+        this.dir = msg.dir;
+        this.moving = msg.moving;
+        this.group = msg.group;
+        this.id = msg.id;
+
+        rectangle.x = this.x;
+        rectangle.y = this.y;
+        rectangle.width = WIDTH;
+        rectangle.height = HEIGHT;
+    }
+
     public void paint(Graphics g) {
         if(!living) {
-            tankFrame.badTank.remove(this);
+            tankFrame.tanks.remove(this);
         }
+        Color color = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawString(id.toString(),this.x,this.y - 10);
+        g.setColor(color);
         if(this.group == Group.GOOD) {
             switch (dir) {
                 case UP:
@@ -155,8 +181,8 @@ public class Tank {
     public void fire() {
         if(this.group == Group.GOOD)
             new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
-        int bx = this.x + Tank.GOODWIDTH / 2 - Bullet.WIDTH / 2;
-        int by = this.y + Tank.GOODHEIGHT / 2 - Bullet.HEIGHT /2;
+        int bx = this.x + Tank.GOODWIDTH / 2 - WIDTH / 2;
+        int by = this.y + Tank.GOODHEIGHT / 2 - HEIGHT /2;
         tankFrame.bullets.add(new Bullet(bx, by, this.dir,this.group,this.tankFrame));
     }
 
@@ -186,5 +212,42 @@ public class Tank {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public static int getSPEED() {
+        return SPEED;
+    }
+
+    public boolean isLiving() {
+        return living;
+    }
+
+    public void setLiving(boolean living) {
+        this.living = living;
+    }
+
+    public static int getGOODWIDTH() {
+        return GOODWIDTH;
+    }
+
+    public static void setGOODWIDTH(int GOODWIDTH) {
+        Tank.GOODWIDTH = GOODWIDTH;
+    }
+
+    public static int getGOODHEIGHT() {
+        return GOODHEIGHT;
+    }
+
+    public static void setGOODHEIGHT(int GOODHEIGHT) {
+        Tank.GOODHEIGHT = GOODHEIGHT;
     }
 }

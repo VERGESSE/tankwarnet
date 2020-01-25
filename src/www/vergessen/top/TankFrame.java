@@ -5,19 +5,22 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 public class TankFrame extends Frame {
+    public static final TankFrame INSTANCE = new TankFrame();
+
+    Random random = new Random();
     
-	Tank myTank = new Tank(350,400, Dir.DOWN,Group.GOOD,this);
+	Tank myTank = new Tank(random.nextInt(GAME_WIDTH),random.nextInt(GAME_HEIGHT), Dir.DOWN,Group.GOOD,this);
 //	Bullet bullet = new Bullet(300,300,Dir.DOWN);
 	List<Bullet> bullets = new ArrayList();
 	static final int GAME_WIDTH = 1080,GAME_HEIGHT = 960;
-    List<Tank> badTank = new ArrayList<>();
+    Map<UUID,Tank> tanks = new HashMap<>();
     List<Exploder> exploders = new ArrayList<>();
 	
-	public TankFrame() {
+	private TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
         setTitle("tank war");
@@ -54,23 +57,33 @@ public class TankFrame extends Frame {
         Color color = g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量" + bullets.size(),13,48);
-        g.drawString("敌人的数量" + badTank.size(),13,68);
+        g.drawString("敌人的数量" + tanks.size(),13,68);
         g.setColor(color);
         myTank.paint(g);
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
-        for (int i = 0; i < badTank.size(); i++) {
-            badTank.get(i).paint(g);
-        }
+//        for (int i = 0; i < tanks.size(); i++) {
+//            tanks.get(i).paint(g);
+//        }
+        tanks.values().stream().forEach((e) -> e.paint(g));
+
         for(int i = 0; i < exploders.size(); i++){
             exploders.get(i).paint(g);
         }
         for(int i = 0; i < bullets.size() ; i++)
-            for(int j = 0; j < badTank.size(); j++)
-                bullets.get(i).collideWith(badTank.get(j));
+            for(int j = 0; j < tanks.size(); j++)
+                bullets.get(i).collideWith(tanks.get(j));
 
 	}
+
+    public void addTank(Tank tank) {
+        this.tanks.put(tank.id,tank);
+    }
+
+    public Tank findByUUID(UUID id) {
+        return this.tanks.get(id);
+    }
 
     class MyKeyListener extends KeyAdapter {
 
@@ -84,10 +97,10 @@ public class TankFrame extends Frame {
 //            new Thread(()->new Audio("audio/tank_move.wav").play()).start();
             int key = e.getKeyCode();
             switch (key) {
-                case KeyEvent.VK_LEFT: bL = true;break;
-                case KeyEvent.VK_UP: bU = true;break;
-                case KeyEvent.VK_RIGHT: bR = true;break;
-                case KeyEvent.VK_DOWN: bD = true;break;
+                case KeyEvent.VK_A: bL = true;break;
+                case KeyEvent.VK_W: bU= true;break;
+                case KeyEvent.VK_D: bR = true;break;
+                case KeyEvent.VK_S: bD = true;break;
                 default: break;
             }
 
@@ -112,16 +125,20 @@ public class TankFrame extends Frame {
         public void keyReleased(KeyEvent e) {
             int key = e.getKeyCode();
             switch (key) {
-                case KeyEvent.VK_LEFT: bL = false;break;
-                case KeyEvent.VK_UP: bU = false;break;
-                case KeyEvent.VK_RIGHT: bR = false;break;
-                case KeyEvent.VK_DOWN: bD = false;break;
-                case KeyEvent.VK_CONTROL:
+                case KeyEvent.VK_A: bL = false;break;
+                case KeyEvent.VK_W: bU = false;break;
+                case KeyEvent.VK_D: bR = false;break;
+                case KeyEvent.VK_S: bD = false;break;
+                case KeyEvent.VK_J:
                     myTank.fire();
                     break;
                 default: break;
             }
             setMainTankDir();
         }
+    }
+
+    public Tank getMyTank(){
+	    return this.myTank;
     }
 }
