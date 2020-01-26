@@ -21,6 +21,7 @@ public class Server {
 			ServerBootstrap b = new ServerBootstrap();
 			ChannelFuture f = b.group(bossGroup, workerGroup)
 				.channel(NioServerSocketChannel.class)
+                .childOption(ChannelOption.TCP_NODELAY,true)
 				.childHandler(new ChannelInitializer<SocketChannel>() {
 					@Override
 					protected void initChannel(SocketChannel ch) throws Exception {

@@ -35,6 +35,7 @@ public class TankJoinMsg extends Msg{
 
     public TankJoinMsg() {}
 
+    @Override
     public void parse(byte[] bytes) {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(bytes));
         try {
@@ -54,6 +55,11 @@ public class TankJoinMsg extends Msg{
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public MsgType getMsgType() {
+        return MsgType.TankJoin;
     }
 
     @Override
@@ -115,7 +121,7 @@ public class TankJoinMsg extends Msg{
         return builder.toString();
     }
 
-    @Override
+    @Override 
     public void handle() {
         if (this.id.equals(TankFrame.INSTANCE.getMyTank().getId())||
                 TankFrame.INSTANCE.findByUUID(this.id) != null) return;

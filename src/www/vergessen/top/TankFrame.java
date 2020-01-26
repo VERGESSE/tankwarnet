@@ -1,5 +1,10 @@
 package www.vergessen.top;
 
+import www.vergessen.top.net.Client;
+import www.vergessen.top.net.TankDirChangedMsg;
+import www.vergessen.top.net.TankStartMovingMsg;
+import www.vergessen.top.net.TankStopMsg;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -7,17 +12,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
 
     Random random = new Random();
     
-	Tank myTank = new Tank(random.nextInt(GAME_WIDTH),random.nextInt(GAME_HEIGHT), Dir.DOWN,Group.GOOD,this);
+	Tank myTank = new Tank(random.nextInt(GAME_WIDTH - Tank.GOODWIDTH),random.nextInt(GAME_HEIGHT - Tank.GOODHEIGHT), Dir.DOWN,Group.GOOD,this);
 //	Bullet bullet = new Bullet(300,300,Dir.DOWN);
 	List<Bullet> bullets = new ArrayList();
-	static final int GAME_WIDTH = 1080,GAME_HEIGHT = 960;
-    Map<UUID,Tank> tanks = new HashMap<>();
+	static final int GAME_WIDTH = 960,GAME_HEIGHT = 540;
+    Map<UUID,Tank> tanks = new ConcurrentHashMap<>();
     List<Exploder> exploders = new ArrayList<>();
 	
 	private TankFrame() {
@@ -71,15 +77,13 @@ public class TankFrame extends Frame {
         for(int i = 0; i < exploders.size(); i++){
             exploders.get(i).paint(g);
         }
-        for(int i = 0; i < bullets.size() ; i++)
-            for(int j = 0; j < tanks.size(); j++)
-                bullets.get(i).collideWith(tanks.get(j));
+        Collection<Tank> values = tanks.values();
+        for(int i=0; i<bullets.size(); i++) {
+            for(Tank t : values )
+                bullets.get(i).collideWith(t);
+        }
 
 	}
-
-    public void addTank(Tank tank) {
-        this.tanks.put(tank.id,tank);
-    }
 
     public Tank findByUUID(UUID id) {
         return this.tanks.get(id);
@@ -108,17 +112,29 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            myTank.setMoving(true);
-            if(bL) myTank.setDir(Dir.LEFT);
-            if(bU) myTank.setDir(Dir.UP);
-            if(bR) myTank.setDir(Dir.RIGHT);
-            if(bD) myTank.setDir(Dir.DOWN);
-            if(bL && bU) myTank.setDir(Dir.LEFT_UP);
-            if(bL && bD) myTank.setDir(Dir.LEFT_DOWN);
-            if(bR && bU) myTank.setDir(Dir.RIGHT_UP);
-            if(bR && bD) myTank.setDir(Dir.RIGHT_DOWN);
+            //save the old dir
+            Dir dir = myTank.getDir();
 
-            if(!bL&&!bU&&!bR&&!bD) myTank.setMoving(false);
+            if(!bL&&!bU&&!bR&&!bD){
+                myTank.setMoving(false);
+                Client.INSTANCE.send(new TankStopMsg(getMyTank()));
+            }else {
+                if (bL) myTank.setDir(Dir.LEFT);
+                if (bU) myTank.setDir(Dir.UP);
+                if (bR) myTank.setDir(Dir.RIGHT);
+                if (bD) myTank.setDir(Dir.DOWN);
+                if (bL && bU) myTank.setDir(Dir.LEFT_UP);
+                if (bL && bD) myTank.setDir(Dir.LEFT_DOWN);
+                if (bR && bU) myTank.setDir(Dir.RIGHT_UP);
+                if (bR && bD) myTank.setDir(Dir.RIGHT_DOWN);
+                if(!myTank.isMoving())
+                    Client.INSTANCE.send(new TankStartMovingMsg(getMyTank()));
+                myTank.setMoving(true);
+
+                if(dir != myTank.getDir()) {
+                    Client.INSTANCE.send(new TankDirChangedMsg(myTank));
+                }
+            }
         }
 
         @Override
@@ -141,4 +157,22 @@ public class TankFrame extends Frame {
     public Tank getMyTank(){
 	    return this.myTank;
     }
+
+    public Bullet findBulletByUUID(UUID id) {
+        for(int i=0; i<bullets.size(); i++) {
+            if(bullets.get(i).getId().equals(id))
+                return bullets.get(i);
+        }
+
+        return null;
+    }
+
+    public void addTank(Tank tank) {
+        this.tanks.put(tank.id,tank);
+    }
+
+    public void addBullet(Bullet b) {
+        bullets.add(b);
+    }
+
 }

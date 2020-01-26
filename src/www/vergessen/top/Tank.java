@@ -1,5 +1,7 @@
 package www.vergessen.top;
 
+import www.vergessen.top.net.BulletNewMsg;
+import www.vergessen.top.net.Client;
 import www.vergessen.top.net.TankJoinMsg;
 
 import java.awt.*;
@@ -16,12 +18,12 @@ public class Tank {
     private boolean moving = false;
     private TankFrame tankFrame;
     private boolean living = true;
-    private Group group = Group.BAD;
-    UUID id = UUID.randomUUID();
+    private Group group = Group.GOOD;
+    UUID id ;
 
     private Random random = new Random();
 
-    private Rectangle rectangle = new Rectangle();
+    public Rectangle rectangle = new Rectangle();
 
     public static int GOODWIDTH = ResourceMgr.goodTankU.getWidth();
     public static int GOODHEIGHT = ResourceMgr.goodTankU.getHeight();
@@ -32,6 +34,7 @@ public class Tank {
         this.dir = dir;
         this.group = group;
         this.tankFrame = tankFrame;
+        this.id = UUID.randomUUID();
 
         rectangle.x = this.x;
         rectangle.y = this.y;
@@ -54,9 +57,9 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        if(!living) {
-            tankFrame.tanks.remove(this);
-        }
+//        if(!living) {
+//            tankFrame.tanks.remove(this.id);
+//        }
         Color color = g.getColor();
         g.setColor(Color.YELLOW);
         g.drawString(id.toString(),this.x,this.y - 10);
@@ -125,7 +128,7 @@ public class Tank {
     private void move() {
         if(!moving)
             return;
-        if(random.nextInt(40) > 38) this.dir = Dir.getRandomDir();
+        if(this.group == Group.BAD && random.nextInt(40) > 38) this.dir = Dir.getRandomDir();
         switch (dir){
             case LEFT: x-=SPEED;break;
             case UP: y-=SPEED;break;
@@ -181,9 +184,14 @@ public class Tank {
     public void fire() {
         if(this.group == Group.GOOD)
             new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
-        int bx = this.x + Tank.GOODWIDTH / 2 - WIDTH / 2;
-        int by = this.y + Tank.GOODHEIGHT / 2 - HEIGHT /2;
-        tankFrame.bullets.add(new Bullet(bx, by, this.dir,this.group,this.tankFrame));
+        int bX = this.x + Tank.GOODWIDTH/2 - Bullet.WIDTH/2;
+        int bY = this.y + Tank.GOODHEIGHT/2 - Bullet.HEIGHT/2;
+
+        Bullet b = new Bullet(this.id, bX, bY, this.dir, this.group, this.tankFrame);
+
+        tankFrame.bullets.add(b);
+
+        Client.INSTANCE.send(new BulletNewMsg(b));
     }
 
     public int getX() {
@@ -204,6 +212,13 @@ public class Tank {
 
     public void die() {
         living = false;
+        TankFrame.INSTANCE.exploders.add(new Exploder(this.getX() + Tank.GOODWIDTH/2-Exploder.WIDTH/2,this.getY()+Tank.GOODHEIGHT/2-Exploder.HEIGHT/2,TankFrame.INSTANCE));
+        if(this.equals(TankFrame.INSTANCE.myTank)){
+            System.exit(0);
+        }else {
+            TankFrame.INSTANCE.tanks.remove(this.id);
+
+        }
     }
 
     public Group getGroup() {

@@ -1,17 +1,16 @@
 package www.vergessen.top.net;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.ReferenceCountUtil;
-import www.vergessen.top.Tank;
 import www.vergessen.top.TankFrame;
 
 public class Client {
+
+    public static final Client INSTANCE = new Client();
+    private Client() {}
 
 	private Channel channel = null;
 
@@ -23,6 +22,7 @@ public class Client {
 		try {
 			ChannelFuture f = b.group(group)
                     .channel(NioSocketChannel.class)
+                    .option(ChannelOption.TCP_NODELAY,true)
                     .handler(new ClientChannelInitializer())
 					.connect("localhost", 8888);
 
@@ -50,18 +50,12 @@ public class Client {
 		}
 	}
 	
-	public void send(String msg) {
-		ByteBuf buf = Unpooled.copiedBuffer(msg.getBytes());
-		channel.writeAndFlush(buf);
-	}
-
-	public static void main(String[] args) throws Exception {
-		Client c = new Client();
-		c.connect();
+	public void send(Msg msg) {
+		channel.writeAndFlush(msg);
 	}
 
 	public void closeConnect() {
-		this.send("_bye_");
+//		this.send("_bye_");
 		//channel.close();
 	}
 }
@@ -71,24 +65,18 @@ class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
 		ch.pipeline()
-			.addLast(new TankMsgEncoder())
-            .addLast(new TankMsgDecoder())
+			.addLast(new MsgEncoder())
+            .addLast(new MsgDecoder())
 			.addLast(new ClientHandler());
 	}
 
 }
 
-class ClientHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
+class ClientHandler extends SimpleChannelInboundHandler<Msg> {
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) throws Exception {
-        if (msg.id.equals(TankFrame.INSTANCE.getMyTank().getId())||
-                TankFrame.INSTANCE.findByUUID(msg.id) != null) return;
-        System.out.println(msg);
-        Tank tank = new Tank(msg);
-        TankFrame.INSTANCE.addTank(tank);
-
-        ctx.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getMyTank()));
+    protected void channelRead0(ChannelHandlerContext ctx, Msg msg) throws Exception {
+        msg.handle();
     }
 
     @Override

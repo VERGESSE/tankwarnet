@@ -1,6 +1,10 @@
 package www.vergessen.top;
 
+import www.vergessen.top.net.Client;
+import www.vergessen.top.net.TankDieMsg;
+
 import java.awt.*;
+import java.util.UUID;
 
 public class Bullet {
     private static final int SPEED = 15;
@@ -8,23 +12,29 @@ public class Bullet {
     public static int HEIGHT = ResourceMgr.bulletD.getHeight();
     private int x,y;
     private Dir dir;
+
+    private UUID id = UUID.randomUUID();
+    private UUID playerId;
+
     private boolean living = true;
     private Group group = Group.BAD;
     private TankFrame tankFrame;
 
     private Rectangle rectangle = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir,Group group,TankFrame tankFrame) {
+    public Bullet(UUID playerId, int x, int y, Dir dir, Group group, TankFrame tf) {
+        this.playerId = playerId;
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tankFrame = tankFrame;
+        this.tankFrame = tf;
 
         rectangle.x = this.x;
         rectangle.y = this.y;
         rectangle.width = WIDTH;
         rectangle.height = HEIGHT;
+
     }
 
     public void paint(Graphics g){
@@ -65,20 +75,19 @@ public class Bullet {
             living = false;
     }
 
+
     public void collideWith(Tank tank) {
-        if(this.group == tank.getGroup())return;
-
-
-        Rectangle rectangle1 = new Rectangle(this.x, this.y, WIDTH, HEIGHT);
-        Rectangle rectangle2 = new Rectangle(tank.getX(), tank.getY(), Tank.GOODWIDTH, Tank.GOODHEIGHT);
-        if (rectangle1.intersects(rectangle2)) {
-            this.die();
+        if(this.playerId.equals(tank.getId())) return;
+        //System.out.println("bullet rect:" + this.rect);
+        //System.out.println("tank rect:" + tank.rect);
+        if(this.living && tank.isLiving() && this.rectangle.intersects(tank.rectangle)) {
             tank.die();
-            tankFrame.exploders.add(new Exploder(tank.getX() + Tank.GOODWIDTH/2-Exploder.WIDTH/2,tank.getY()+Tank.GOODHEIGHT/2-Exploder.HEIGHT/2,tankFrame));
+            this.die();
+            Client.INSTANCE.send(new TankDieMsg(this.id, tank.getId()));
         }
     }
 
-    private void die() {
+    public void die() {
         this.living = false;
     }
 
@@ -88,5 +97,70 @@ public class Bullet {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+
+    public static int getWIDTH() {
+        return WIDTH;
+    }
+
+    public static void setWIDTH(int WIDTH) {
+        Bullet.WIDTH = WIDTH;
+    }
+
+    public static int getHEIGHT() {
+        return HEIGHT;
+    }
+
+    public static void setHEIGHT(int HEIGHT) {
+        Bullet.HEIGHT = HEIGHT;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public Dir getDir() {
+        return dir;
+    }
+
+    public void setDir(Dir dir) {
+        this.dir = dir;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(UUID playerId) {
+        this.playerId = playerId;
+    }
+
+    public boolean isLiving() {
+        return living;
+    }
+
+    public void setLiving(boolean living) {
+        this.living = living;
     }
 }
